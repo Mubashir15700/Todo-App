@@ -2,14 +2,23 @@ import { useState } from "react";
 
 interface AddTodoFormProps {
   addTodo: (todo: string) => void;
+  list: Array<any>;
 }
 
-const AddTodoForm: React.FC<AddTodoFormProps> = ({ addTodo }) => {
+const AddTodoForm: React.FC<AddTodoFormProps> = ({ addTodo, list }) => {
   const [todo, setTodo] = useState<string>("");
+  const [error, setError] = useState<string>("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (list.length) {
+      const taskExists = list.some((task) => task.task === todo);
+      if (taskExists) {
+        return setError("Todo already added.");
+      }
+    }
     if (todo.length) {
+      setError("");
       addTodo(todo);
     }
     setTodo("");
@@ -27,6 +36,7 @@ const AddTodoForm: React.FC<AddTodoFormProps> = ({ addTodo }) => {
       <button type="submit" className="todo-btn">
         Add Task
       </button>
+      {error !== "" && <p style={{ color: 'red' }}>{error}</p>}
     </form>
   );
 };

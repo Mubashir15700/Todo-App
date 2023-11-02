@@ -6,14 +6,18 @@ interface Task {
     task: string;
   };
   editTodo: (task: string, id: string) => void;
+  list: Array<any>;
 }
 
-const EditTodoForm: React.FC<Task> = ({ editTodo, task }) => {
+const EditTodoForm: React.FC<Task> = ({ editTodo, task, list }) => {
   const [todo, setTodo] = useState(task.task);
+  const [error, setError] = useState<string>("");
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    // prevent default action
     e.preventDefault();
-    // edit todo
+    const taskExists = list.some((task) => task.task === todo);
+    if (taskExists) {
+      return setError("Todo already added.");
+    }
     editTodo(todo, task.id);
   };
   return (
@@ -28,6 +32,7 @@ const EditTodoForm: React.FC<Task> = ({ editTodo, task }) => {
       <button type="submit" className="todo-btn">
         Edit Task
       </button>
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </form>
   );
 };

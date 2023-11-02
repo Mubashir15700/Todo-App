@@ -56,10 +56,10 @@ const TodoWrapper: React.FC = () => {
   return (
     <div className="TodoWrapper">
       <h1>Get Things Done!</h1>
-      <AddTodoForm addTodo={addTodo} />
+      <AddTodoForm addTodo={addTodo} list={todos} />
       {todos.map((todo, index) =>
         todo.isEditing ? (
-          <EditTodoForm editTodo={editTask} task={todo} />
+          <EditTodoForm editTodo={editTask} key={index} task={todo} list={todos} />
         ) : (
           <Todo
             task={todo}
